@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Details | FitGenAI</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="form-container">
+<h2>Tell us about yourself</h2>
+
+<form action="/processing" method="POST">
+
+<input type="number" name="age" placeholder="Age" required>
+<input type="number" name="height" placeholder="Height (cm)" required>
+<input type="number" name="weight" placeholder="Weight (kg)" required>
+
+<select name="gender" required>
+<option value="">Gender</option>
+<option value="male">Male</option>
+<option value="female">Female</option>
+</select>
+
+<select name="goal" required>
+<option value="">Goal</option>
+<option value="lose_weight">Lose Weight</option>
+<option value="stay_fit">Stay Fit</option>
+<option value="gain_muscle">Gain Muscle</option>
+</select>
+
+<select name="activity" required>
+<option value="">Activity Level</option>
+<option value="low">Low</option>
+<option value="moderate">Moderate</option>
+<option value="high">High</option>
+</select>
+
+<select name="workout_type" required>
+<option value="">Workout Preference</option>
+<option value="home">Home Workout</option>
+<option value="gym">Gym Workout</option>
+</select>
+
+<button type="submit" class="cta">Create AI Plan</button>
+</form>
+</div>
+
+</body>
+</html>
