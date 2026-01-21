@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_PATH = os.path.join(BASE_DIR, "Indian_Food_Nutrition_Processed.csv")
+CSV_PATH = os.path.join(BASE_DIR, "Indian_Food_Nutrition_processed.csv")
 
 GYM_WORKOUT = {
     "gain_muscle": {
@@ -143,3 +143,4 @@ def generate_plan(age, gender, height_cm, weight_kg, goal, activity_level, worko
         result["WorkoutPlan"] = GYM_WORKOUT["gain_muscle"]
 
     return result
+
