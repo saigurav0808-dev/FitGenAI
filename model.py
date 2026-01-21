@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_PATH = os.path.join(BASE_DIR, "Indian_Food_Nutrition_processed.csv")
+CSV_PATH = os.path.join(BASE_DIR, "Indian_Food_Nutrition_Processed.csv")
 
 GYM_WORKOUT = {
     "gain_muscle": {
@@ -144,5 +144,6 @@ else:
 
 
     return result
+
 
 
