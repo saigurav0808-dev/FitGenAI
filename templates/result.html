@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Fitness Plan | FitGenAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="result-container">
+
+  <h1 class="title">Your AI Fitness Plan</h1>
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric-card">
+      <h3>BMI</h3>
+      <p>{{ data.BMI }}</p>
+      <small>{{ data.Status }}</small>
+    </div>
+
+    <div class="metric-card">
+      <h3>Calories</h3>
+      <p>{{ data.Calories }}</p>
+      <small>kcal / day</small>
+    </div>
+
+    <div class="metric-card">
+      <h3>Workout</h3>
+      <p>{{ data.WorkoutType | title }}</p>
+      <small>Plan</small>
+    </div>
+  </div>
+
+  <!-- DIET TABLE -->
+  <h2 class="section-title">Diet Plan</h2>
+
+  <table class="plan-table">
+    <tr>
+      <th>Meal</th>
+      <th>Food Items</th>
+    </tr>
+    <tr>
+      <td>Breakfast</td>
+      <td>
+        <ul>
+          {% for item in data.Breakfast %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Lunch</td>
+      <td>
+        <ul>
+          {% for item in data.Lunch %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Dinner</td>
+      <td>
+        <ul>
+          {% for item in data.Dinner %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+  </table>
+
+  <!-- WORKOUT TABLE -->
+  <h2 class="section-title">
+    {% if data.WorkoutType == "home" %}
+      Home Workout Plan (Weekly)
+    {% else %}
+      Gym Workout Plan (Weekly)
+    {% endif %}
+  </h2>
+
+  {% for day, details in data.WorkoutPlan.items() %}
+    <h3 class="day-title">{{ day }}</h3>
+
+    {% if details is string %}
+      <p class="rest-day">{{ details }}</p>
+    {% else %}
+      <table class="plan-table">
+        <tr>
+          <th>Muscle Group</th>
+          <th>Exercises</th>
+        </tr>
+
+        {% for muscle, exercises in details.items() %}
+        <tr>
+          <td><b>{{ muscle }}</b></td>
+          <td>
+            <ul>
+              {% for ex in exercises %}
+                <li>{{ ex }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+  {% endfor %}
+
+  <a href="/user-details" class="cta">Create New Plan</a>
+
+</div>
+
+</body>
+</html>
