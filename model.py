@@ -142,10 +142,4 @@ def generate_plan(age, gender, height_cm, weight_kg, goal, activity_level, worko
     else:
         result["WorkoutPlan"] = GYM_WORKOUT.get(goal, GYM_WORKOUT["gain_muscle"])
 
-
     return result
-
-
-
-
-
