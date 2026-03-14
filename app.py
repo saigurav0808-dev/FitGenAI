@@ -1,25 +1,44 @@
 from flask import Flask, request, render_template
 from model import generate_plan
-import os
 import time
+import mysql.connector
+
+# Database connection
+try:
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="root123",
+        database="fitgenai"
+    )
+    cursor = db.cursor()
+    print("Database Connected Successfully")
+
+except:
+    print("Database connection error")
 
 app = Flask(__name__)
 
+# Landing Page
 @app.route("/")
 def landing():
     return render_template("landingPage.html")
 
+
 @app.route("/user-details")
 def user_details():
     return render_template("user-details.html")
+
 
 @app.route("/processing", methods=["POST"])
 def processing():
     form_data = request.form.to_dict()
     return render_template("processing.html", data=form_data)
 
+
 @app.route("/result", methods=["POST"])
 def result():
+
     time.sleep(2)
 
     plan = generate_plan(
@@ -34,6 +53,8 @@ def result():
 
     return render_template("result.html", data=plan)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
 
+# Run Server
+if __name__ == "__main__":
+    print("Server Starting...")
+    app.run(debug=True)
