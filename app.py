@@ -1,41 +1,106 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, session
 from model import generate_plan
 import time
-import mysql.connector
-
-# Database connection
-try:
-    db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root123",
-        database="fitgenai"
-    )
-    cursor = db.cursor()
-    print("Database Connected Successfully")
-
-except:
-    print("Database connection error")
+import sqlite3
 
 app = Flask(__name__)
+app.secret_key = "fitgenai_secret"
 
-# Landing Page
+# Database connection
+conn = sqlite3.connect("fitgenai.db", check_same_thread=False)
+cursor = conn.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+name TEXT,
+email TEXT,
+password TEXT
+)
+""")
+
+conn.commit()
+
+
+# ---------------- LANDING PAGE ----------------
 @app.route("/")
 def landing():
     return render_template("landingPage.html")
 
 
+# ---------------- SIGNUP ----------------
+@app.route("/signup", methods=["GET","POST"])
+def signup():
+
+    if request.method == "POST":
+
+        name = request.form["name"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            return "Email already registered. Please login."
+
+        cursor.execute(
+        "INSERT INTO users(name,email,password) VALUES (?,?,?)",
+        (name,email,password)
+        )
+
+        conn.commit()
+
+        return redirect("/login")
+
+    return render_template("signup.html")
+
+# ---------------- LOGIN ----------------
+@app.route("/login", methods=["GET","POST"])
+def login():
+
+    if request.method == "POST":
+
+        email = request.form["email"]
+        password = request.form["password"]
+
+        cursor.execute(
+        "SELECT * FROM users WHERE email=? AND password=?",
+        (email,password)
+        )
+
+        user = cursor.fetchone()
+
+        if user:
+            session["user"] = email
+            return redirect("/user-details")
+
+        else:
+            return "Invalid Login"
+
+    return render_template("login.html")
+
+
+# ---------------- USER DETAILS ----------------
 @app.route("/user-details")
 def user_details():
+
+    if "user" not in session:
+        return redirect("/login")
+
     return render_template("user-details.html")
 
 
+# ---------------- PROCESSING ----------------
 @app.route("/processing", methods=["POST"])
 def processing():
+
     form_data = request.form.to_dict()
+
     return render_template("processing.html", data=form_data)
 
 
+# ---------------- RESULT ----------------
 @app.route("/result", methods=["POST"])
 def result():
 
@@ -54,7 +119,16 @@ def result():
     return render_template("result.html", data=plan)
 
 
-# Run Server
+# ---------------- LOGOUT ----------------
+@app.route("/logout")
+def logout():
+
+    session.pop("user", None)
+
+    return redirect("/")
+
+
+# ---------------- RUN SERVER ----------------
 if __name__ == "__main__":
     print("Server Starting...")
     app.run(debug=True)

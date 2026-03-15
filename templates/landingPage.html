@@ -1,37 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>FitGenAI – AI Fitness Planner</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<meta charset="UTF-8">
+<title>FitGenAI – AI Fitness Planner</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+
+body{
+font-family: Arial;
+margin:0;
+background:#0f172a;
+color:white;
+}
+
+.hero{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+text-align:center;
+}
+
+.badge{
+background:#22c55e;
+padding:6px 12px;
+border-radius:20px;
+font-size:14px;
+}
+
+h1{
+font-size:60px;
+margin:20px 0;
+}
+
+h2{
+font-weight:normal;
+color:#cbd5f5;
+}
+
+p{
+max-width:500px;
+margin:auto;
+color:#cbd5f5;
+}
+
+.buttons{
+margin-top:30px;
+}
+
+.btn{
+padding:12px 28px;
+border-radius:8px;
+text-decoration:none;
+margin:10px;
+font-size:18px;
+}
+
+.login{
+background:#3b82f6;
+color:white;
+}
+
+.signup{
+background:#22c55e;
+color:white;
+}
+
+</style>
 </head>
+
 <body>
 
 <section class="hero">
-    <div class="left">
-        <span class="badge">✨ AI-Powered Fitness</span>
 
-        <h1>FitGenAI</h1>
+<div>
 
-        <h2>AI-Based Personalized Workout & Diet Planner</h2>
+<span class="badge">✨ AI Powered Fitness</span>
 
-        <p>
-            Designed for busy college students. Get customized fitness plans
-            that work with your hostel food, tight budget, and packed schedule.
-        </p>
+<h1>FitGenAI</h1>
 
-       <a href="/user-details" class="cta">Get Started – It’s Free!</a>
+<h2>AI Based Personalized Workout & Diet Planner</h2>
 
+<p>
+Designed for busy college students. Get customized fitness plans
+that work with your hostel food and tight schedule.
+</p>
 
+<div class="buttons">
 
+<a href="/login" class="btn login">Login</a>
 
-        <div class="features">
-            <span class="dot green"></span> No Equipment Needed
-            <span class="dot blue"></span> Budget Friendly
-            <span class="dot orange"></span> Quick Results
-        </div>
-    </div>
+<a href="/signup" class="btn signup">Signup</a>
 
+</div>
+
+</div>
 
 </section>
 
