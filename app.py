@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, session
 from model import generate_plan
 import time
 import sqlite3
+from chatbot import ask_chatbot
 
 app = Flask(__name__)
 app.secret_key = "fitgenai_secret"
@@ -127,6 +128,18 @@ def logout():
 
     return redirect("/")
 
+@app.route("/chat", methods=["POST"])
+def chat():
+
+    user_message = request.json.get("message")
+
+    reply = ask_chatbot(user_message)
+
+    return {"reply": reply}
+    
+@app.route("/chatbot")
+def chatbot_page():
+    return render_template("chatbot.html")
 
 # ---------------- RUN SERVER ----------------
 if __name__ == "__main__":

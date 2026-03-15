@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>FitGenAI Chatbot</title>
+
+<style>
+
+body{
+font-family: Arial;
+background: linear-gradient(135deg,#1e3c72,#2a5298);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+margin:0;
+}
+
+#chatbox{
+width:420px;
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+h2{
+text-align:center;
+margin-bottom:15px;
+}
+
+#messages{
+height:320px;
+overflow-y:auto;
+border:1px solid #ddd;
+padding:10px;
+margin-bottom:10px;
+border-radius:8px;
+background:#f9f9f9;
+}
+
+.user{
+text-align:right;
+margin:8px 0;
+}
+
+.bot{
+text-align:left;
+margin:8px 0;
+}
+
+.user span{
+background:#2a5298;
+color:white;
+padding:8px 12px;
+border-radius:15px;
+display:inline-block;
+}
+
+.bot span{
+background:#e4e6eb;
+padding:8px 12px;
+border-radius:15px;
+display:inline-block;
+}
+
+#inputArea{
+display:flex;
+gap:8px;
+}
+
+input{
+flex:1;
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+outline:none;
+}
+
+button{
+padding:10px 15px;
+border:none;
+background:#2a5298;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1e3c72;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="chatbox">
+
+<h2>FitGenAI Chatbot 🤖</h2>
+
+<div id="messages"></div>
+
+<div id="inputArea">
+<input id="msg" placeholder="Ask about workout or diet...">
+<button onclick="sendMessage()">Send</button>
+</div>
+
+</div>
+
+<script>
+
+async function sendMessage(){
+
+let input = document.getElementById("msg")
+let msg = input.value.trim()
+
+if(msg === "") return
+
+let messages = document.getElementById("messages")
+
+messages.innerHTML += `<div class="user"><span>${msg}</span></div>`
+
+input.value=""
+
+messages.innerHTML += `<div class="bot" id="thinking"><span>Thinking...</span></div>`
+
+messages.scrollTop = messages.scrollHeight
+
+let response = await fetch("/chat",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({message:msg})
+})
+
+let data = await response.json()
+
+document.getElementById("thinking").remove()
+
+messages.innerHTML += `<div class="bot"><span>${data.reply}</span></div>`
+
+messages.scrollTop = messages.scrollHeight
+
+}
+
+document.getElementById("msg").addEventListener("keypress",function(e){
+
+if(e.key === "Enter"){
+sendMessage()
+}
+
+})
+
+</script>
+
+</body>
+
+</html>
