@@ -1,9 +1,9 @@
-import google.generativeai as genai
+from google import genai
 
 # API KEY
-genai.configure(api_key="AIzaSyAOaYBI9kK6-KWHb5ytAx8V6mOqr-R2570")
+client = genai.Client(api_key="AIzaSyB5mJGdbvsTGyWl8N1m9V9qCuutmHrryH0")
 
-model = genai.GenerativeModel("gemini-2.5-flash")
+MODEL_NAME = "gemini-2.5-flash"
 
 def ask_chatbot(user_message):
 
@@ -20,6 +20,9 @@ def ask_chatbot(user_message):
     User question: {user_message}
     """
 
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt,
+    )
 
     return response.text
