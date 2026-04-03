@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile | FitGenAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav class="main-nav">
+  <div class="nav-brand">FitGenAI</div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/profile">Profile</a></li>
+    <li><a href="/chatbot">Chat</a></li>
+    <li><a href="/logout">Logout</a></li>
+  </ul>
+</nav>
+
+<div class="profile-container">
+  <h1>Your Profile</h1>
+
+  <div class="profile-info">
+    <div class="info-card">
+      <h3>Name</h3>
+      <p>{{ user.name }}</p>
+    </div>
+
+    <div class="info-card">
+      <h3>Email</h3>
+      <p>{{ user.email }}</p>
+    </div>
+
+    <div class="info-card">
+      <h3>Member Since</h3>
+      <p>ID #{{ user.id }}</p>
+    </div>
+  </div>
+
+  <div class="profile-actions">
+    <a href="/user-details" class="cta">Create New Plan</a>
+    <a href="/result" class="cta">View Current Plan</a>
+    <a href="/chatbot" class="cta">Chat with AI</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <p>© 2026 FitGenAI. All rights reserved.</p>
+    <p><a href="/">Home</a> • <a href="/profile">Profile</a> • <a href="/chatbot">Chat</a> • <a href="/logout">Logout</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

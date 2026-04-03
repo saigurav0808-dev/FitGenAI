@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, session
+from flask import Flask, request, render_template, redirect, session, url_for
 from model import generate_plan
 import time
 import sqlite3
@@ -17,6 +17,16 @@ id INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT,
 email TEXT,
 password TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS feedback(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+name TEXT,
+email TEXT,
+message TEXT,
+submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 """)
 
@@ -74,7 +84,7 @@ def login():
 
         if user:
             session["user"] = email
-            return redirect("/user-details")
+            return redirect("/profile")
 
         else:
             return "Invalid Login"
@@ -92,6 +102,29 @@ def user_details():
     return render_template("user-details.html")
 
 
+# ---------------- PROFILE ----------------
+@app.route("/profile")
+def profile():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    email = session["user"]
+    cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+    user = cursor.fetchone()
+
+    if not user:
+        return redirect("/login")
+
+    user_data = {
+        "id": user[0],
+        "name": user[1],
+        "email": user[2]
+    }
+
+    return render_template("profile.html", user=user_data)
+
+
 # ---------------- PROCESSING ----------------
 @app.route("/processing", methods=["POST"])
 def processing():
@@ -102,22 +135,49 @@ def processing():
 
 
 # ---------------- RESULT ----------------
-@app.route("/result", methods=["POST"])
+@app.route("/result", methods=["GET", "POST"])
 def result():
+    if request.method == "POST":
+        time.sleep(2)
 
-    time.sleep(2)
+        plan = generate_plan(
+            age=int(request.form["age"]),
+            gender=request.form["gender"],
+            height_cm=int(request.form["height"]),
+            weight_kg=int(request.form["weight"]),
+            goal=request.form["goal"],
+            activity_level=request.form["activity"],
+            workout_type=request.form["workout_type"]
+        )
 
-    plan = generate_plan(
-        age=int(request.form["age"]),
-        gender=request.form["gender"],
-        height_cm=int(request.form["height"]),
-        weight_kg=int(request.form["weight"]),
-        goal=request.form["goal"],
-        activity_level=request.form["activity"],
-        workout_type=request.form["workout_type"]
-    )
+        session["plan"] = plan
+        return render_template("result.html", data=plan)
+
+    plan = session.get("plan")
+    if not plan:
+        return redirect(url_for("user_details"))
 
     return render_template("result.html", data=plan)
+
+
+# ---------------- FEEDBACK ----------------
+@app.route("/feedback", methods=["POST"])
+def feedback():
+
+    name = request.form.get("name")
+    email = request.form.get("email")
+    message = request.form.get("message")
+
+    if not (name and email and message):
+        return "All feedback fields are required.", 400
+
+    cursor.execute(
+        "INSERT INTO feedback (name, email, message) VALUES (?, ?, ?)",
+        (name, email, message)
+    )
+    conn.commit()
+
+    return redirect("/user-details")
 
 
 # ---------------- LOGOUT ----------------

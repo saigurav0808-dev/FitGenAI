@@ -4,72 +4,19 @@
 <meta charset="UTF-8">
 <title>FitGenAI – AI Fitness Planner</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-<style>
-
-body{
-font-family: Arial;
-margin:0;
-background:#0f172a;
-color:white;
-}
-
-.hero{
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-text-align:center;
-}
-
-.badge{
-background:#22c55e;
-padding:6px 12px;
-border-radius:20px;
-font-size:14px;
-}
-
-h1{
-font-size:60px;
-margin:20px 0;
-}
-
-h2{
-font-weight:normal;
-color:#cbd5f5;
-}
-
-p{
-max-width:500px;
-margin:auto;
-color:#cbd5f5;
-}
-
-.buttons{
-margin-top:30px;
-}
-
-.btn{
-padding:12px 28px;
-border-radius:8px;
-text-decoration:none;
-margin:10px;
-font-size:18px;
-}
-
-.login{
-background:#3b82f6;
-color:white;
-}
-
-.signup{
-background:#22c55e;
-color:white;
-}
-
-</style>
 </head>
 
 <body>
+
+<nav class="main-nav">
+  <div class="nav-brand">FitGenAI</div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/profile">Profile</a></li>
+    <li><a href="/chatbot">Chat</a></li>
+    <li><a href="/logout">Logout</a></li>
+  </ul>
+</nav>
 
 <section class="hero">
 
@@ -77,7 +24,7 @@ color:white;
 
 <span class="badge">✨ AI Powered Fitness</span>
 
-<h1>FitGenAI</h1>
+<h1 style="color: black;">FitGenAI</h1>
 
 <h2>AI Based Personalized Workout & Diet Planner</h2>
 
@@ -91,14 +38,19 @@ that work with your hostel food and tight schedule.
 <a href="/login" class="btn login">Login</a>
 
 <a href="/signup" class="btn signup">Signup</a>
-<a href="/chatbot">
-<button>Fitness AI Chatbot</button>
-</a>
+<a href="/chatbot" class="btn btn-chat">Fitness AI Chatbot</a>
 </div>
 
 </div>
 
 </section>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <p>© 2026 FitGenAI. All rights reserved.</p>
+    <p><a href="/">Home</a> • <a href="/profile">Profile</a> • <a href="/chatbot">Chat</a> • <a href="/logout">Logout</a></p>
+  </div>
+</footer>
 
 </body>
 </html>
