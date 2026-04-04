@@ -7,8 +7,9 @@
 }
 
 body {
-  background: #f8fafc;
+  background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 55%, #ffffff 100%);
   color: #1f2937;
+  padding-top: 0;
 }
 
 /* ================= COMMON ================= */
@@ -88,6 +89,9 @@ h1, h2, h3 {
   justify-content: space-between;
   padding: 12px 24px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .main-nav .nav-brand {
@@ -184,24 +188,42 @@ h1, h2, h3 {
 
 /* ================= FOOTER ================= */
 .site-footer {
-  background: #0f766e;
-  color: white;
-  text-align: center;
-  padding: 14px 20px;
-  margin-top: 30px;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 34px 0 28px;
 }
 
-.site-footer .footer-content p {
-  margin: 4px 0;
+.container {
+  width: min(1180px, 100% - 40px);
+  margin: 0 auto;
 }
 
-.site-footer .footer-content a {
-  color: #d1fae5;
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-inner p,
+.footer-inner .footer-links {
+  font-size: 0.98rem;
+  color: #cbd5e1;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #e2e8f0;
   text-decoration: none;
-  margin: 0 6px;
 }
 
-.site-footer .footer-content a:hover {
+.footer-links a:hover {
   text-decoration: underline;
 }
 
@@ -359,24 +381,42 @@ h1, h2, h3 {
 
 /* ================= FOOTER ================= */
 .site-footer {
-  background: #0f766e;
-  color: white;
-  text-align: center;
-  padding: 14px 20px;
-  margin-top: 30px;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 34px 0 28px;
 }
 
-.site-footer .footer-content p {
-  margin: 4px 0;
+.container {
+  width: min(1180px, 100% - 40px);
+  margin: 0 auto;
 }
 
-.site-footer .footer-content a {
-  color: #d1fae5;
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-inner p,
+.footer-inner .footer-links {
+  font-size: 0.98rem;
+  color: #cbd5e1;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #e2e8f0;
   text-decoration: none;
-  margin: 0 6px;
 }
 
-.site-footer .footer-content a:hover {
+.footer-links a:hover {
   text-decoration: underline;
 }
 

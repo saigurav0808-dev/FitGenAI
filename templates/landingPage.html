@@ -3,54 +3,513 @@
 <head>
 <meta charset="UTF-8">
 <title>FitGenAI – AI Fitness Planner</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  /* Global Reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  body {
+    background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 55%, #ffffff 100%);
+    color: #0f172a;
+    line-height: 1.6;
+    padding-top: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  .container {
+    width: min(1180px, 100% - 40px);
+    margin: 0 auto;
+  }
+
+  .main-nav {
+    background: #0f766e;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .nav-brand {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .nav-links a {
+    color: #ffffff;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    opacity: 0.8;
+  }
+
+  .hero {
+    padding: 100px 0 70px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.18), transparent 30%),
+                radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.15), transparent 28%);
+    pointer-events: none;
+  }
+
+  .hero .hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-copy span.badge {
+    display: inline-block;
+    background: rgba(34, 197, 94, 0.14);
+    color: #166534;
+    padding: 10px 16px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    font-size: 0.92rem;
+    margin-bottom: 22px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(3rem, 4.5vw, 4.8rem);
+    line-height: 0.95;
+    margin-bottom: 18px;
+  }
+
+  .hero-copy h2 {
+    max-width: 620px;
+    font-size: clamp(1.05rem, 1.4vw, 1.4rem);
+    color: #334155;
+    margin-bottom: 24px;
+  }
+
+  .hero-copy p {
+    max-width: 700px;
+    color: #475569;
+    margin-bottom: 32px;
+    font-size: 1rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .button-primary,
+  .button-secondary {
+    border: none;
+    border-radius: 999px;
+    padding: 16px 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 170px;
+  }
+
+  .button-primary {
+    background: linear-gradient(135deg, #0f766e, #22c55e);
+    color: #ffffff;
+    box-shadow: 0 18px 30px rgba(34, 197, 94, 0.22);
+  }
+
+  .button-secondary {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  }
+
+  .button-primary:hover,
+  .button-secondary:hover {
+    transform: translateY(-2px);
+  }
+
+  .hero-visual {
+    display: grid;
+    gap: 18px;
+  }
+
+  .hero-card {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    border-radius: 28px;
+    padding: 28px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(12px);
+  }
+
+  .hero-card h3 {
+    margin-bottom: 14px;
+    font-size: 1.15rem;
+  }
+
+  .hero-card p {
+    color: #475569;
+    font-size: 0.98rem;
+  }
+
+  .section {
+    padding: 80px 0;
+  }
+
+  .section .section-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .section .section-header h2 {
+    font-size: 2.4rem;
+    margin-bottom: 14px;
+  }
+
+  .section .section-header p {
+    max-width: 720px;
+    margin: 0 auto;
+    color: #475569;
+    font-size: 1rem;
+  }
+
+  .info-cards,
+  .feature-grid,
+  .process-steps {
+    display: grid;
+    gap: 24px;
+  }
+
+  .info-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+  }
+
+  .card h3 {
+    margin-bottom: 16px;
+    font-size: 1.15rem;
+  }
+
+  .card p {
+    color: #475569;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .feature-card {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+  }
+
+  .feature-card h3 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+  }
+
+  .feature-card p {
+    color: #64748b;
+    font-size: 0.96rem;
+  }
+
+  .process-steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .step-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 24px;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    padding: 32px;
+    text-align: center;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.05);
+  }
+
+  .step-number {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #0f766e;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    margin-bottom: 18px;
+    font-size: 1.1rem;
+  }
+
+  .step-card h3 {
+    margin-bottom: 12px;
+    font-size: 1.15rem;
+  }
+
+  .step-card p {
+    color: #475569;
+  }
+
+  .site-footer {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 34px 0 28px;
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-inner p,
+  .footer-inner .footer-links {
+    font-size: 0.98rem;
+    color: #cbd5e1;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    color: #e2e8f0;
+  }
+
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 900px) {
+    .hero .hero-grid,
+    .info-cards,
+    .feature-grid,
+    .process-steps,
+    .footer-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .main-nav {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .nav-links {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 12px;
+    }
+
+    .hero {
+      padding-top: 80px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      padding: 80px 0 40px;
+    }
+
+    .hero-copy h1 {
+      font-size: 3rem;
+    }
+
+    .hero-copy h2 {
+      font-size: 1.15rem;
+    }
+
+    .button-primary,
+    .button-secondary {
+      width: 100%;
+    }
+  }
+</style>
 </head>
 
 <body>
+  <nav class="main-nav">
+    <div class="nav-brand">FitGenAI</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/profile">Profile</a></li>
+      <li><a href="/chatbot">Chat</a></li>
+      <li><a href="/logout">Logout</a></li>
+    </ul>
+  </nav>
 
-<nav class="main-nav">
-  <div class="nav-brand">FitGenAI</div>
-  <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/profile">Profile</a></li>
-    <li><a href="/chatbot">Chat</a></li>
-    <li><a href="/logout">Logout</a></li>
-  </ul>
-</nav>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="badge">AI-powered fitness & health assistant</span>
+          <h1>FitGenAI</h1>
+          <h2>Smarter workouts, smarter meals, and easier progress tracking with AI-guided fitness support.</h2>
+          <p>FitGenAI blends personalized diet plans, workout coaching, and health tracking into one modern fitness experience built for real life.</p>
+          <div class="hero-actions">
+            <a class="button-primary" href="/chatbot">Try Chatbot</a>
+            <a class="button-secondary" href="/signup">Get Started</a>
+          </div>
+        </div>
 
-<section class="hero">
+        <div class="hero-visual">
+          <div class="hero-card">
+            <h3>Personalized fitness guidance</h3>
+            <p>AI-generated diet and workout recommendations tailored to your goals, body type, and schedule.</p>
+          </div>
+          <div class="hero-card">
+            <h3>Track progress with confidence</h3>
+            <p>Monitor changes, refine your routine, and stay motivated with progress-driven insights.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div>
+    <section class="section" id="about">
+      <div class="section-header">
+        <h2>About FitGenAI</h2>
+        <p>FitGenAI is an AI-powered fitness and health assistant that creates smarter diet plans, recommends workouts, and helps you stay on track.</p>
+      </div>
+      <div class="info-cards">
+        <div class="card">
+          <h3>Fitness guidance</h3>
+          <p>Receive tailored workout suggestions and daily motivation to help you train more effectively.</p>
+        </div>
+        <div class="card">
+          <h3>Diet planning</h3>
+          <p>Get custom meal plans built around your nutrition needs, preferences, and lifestyle.</p>
+        </div>
+      </div>
+    </section>
 
-<span class="badge">✨ AI Powered Fitness</span>
+    <section class="section" id="features">
+      <div class="section-header">
+        <h2>Features</h2>
+        <p>Everything you need to build healthier habits and stay on top of your fitness journey.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="card feature-card">
+          <div class="feature-icon">💬</div>
+          <div>
+            <h3>AI Chatbot</h3>
+            <p>Ask questions, get fitness tips, and access fast support through conversational AI.</p>
+          </div>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">🥗</div>
+          <div>
+            <h3>Personalized Diet Plans</h3>
+            <p>Build meal strategies that adapt to your goals, food preferences, and activity level.</p>
+          </div>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">🏋️</div>
+          <div>
+            <h3>Workout Suggestions</h3>
+            <p>Discover exercise routines tailored to your experience, available equipment, and schedule.</p>
+          </div>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">📈</div>
+          <div>
+            <h3>Health Tracking</h3>
+            <p>Stay on top of your progress with easy tracking and actionable performance feedback.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<h1 style="color: black;">FitGenAI</h1>
+    <section class="section" id="how-it-works">
+      <div class="section-header">
+        <h2>How it Works</h2>
+        <p>Follow a simple three-step flow to begin your FitGenAI journey.</p>
+      </div>
+      <div class="process-steps">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Enter your details</h3>
+          <p>Provide your profile, fitness goals, and preferences to personalize your plan.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Get AI recommendations</h3>
+          <p>Review tailored diet and workout suggestions generated by the FitGenAI engine.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Track your progress</h3>
+          <p>Log progress over time, refine your routine, and reach new goals with clarity.</p>
+        </div>
+      </div>
+    </section>
+  </main>
 
-<h2>AI Based Personalized Workout & Diet Planner</h2>
-
-<p>
-Designed for busy college students. Get customized fitness plans
-that work with your hostel food and tight schedule.
-</p>
-
-<div class="buttons">
-
-<a href="/login" class="btn login">Login</a>
-
-<a href="/signup" class="btn signup">Signup</a>
-<a href="/chatbot" class="btn btn-chat">Fitness AI Chatbot</a>
-</div>
-
-</div>
-
-</section>
-
-<footer class="site-footer">
-  <div class="footer-content">
-    <p>© 2026 FitGenAI. All rights reserved.</p>
-    <p><a href="/">Home</a> • <a href="/profile">Profile</a> • <a href="/chatbot">Chat</a> • <a href="/logout">Logout</a></p>
-  </div>
-</footer>
-
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 FitGenAI. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/chatbot">Chatbot</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

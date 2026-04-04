@@ -1,7 +1,7 @@
 from google import genai
 
 # API KEY
-client = genai.Client(api_key="AIzaSyB5mJGdbvsTGyWl8N1m9V9qCuutmHrryH0")
+client = genai.Client(api_key="AIzaSyBbdApp9HLllxo0nT97t3YW6qwy2vC0hC0")
 
 MODEL_NAME = "gemini-2.5-flash"
 
